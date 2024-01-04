@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jogja_streamers/controller/apiController.dart';
+import 'package:jogja_streamers/controller/playerController.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -12,7 +13,8 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   cek() async {
     await Future.delayed(Duration(seconds: 2));
-    // await fetchAPI().fetchRadio(context);
+    await fetchAPI().fetchRadio(context);
+
     context.go('/login');
   }
 

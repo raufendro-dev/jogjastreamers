@@ -14,7 +14,7 @@ class fetchAPI {
     //debug_print
     print(url);
 
-    var response = await http.get(Uri.parse(url), headers: API.requestHeaders);
+    var response = await http.get(Uri.parse(url));
     var decode = json.decode(response.body);
     print(decode["stations"].length);
     List<Station> list_radio = [];

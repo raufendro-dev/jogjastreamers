@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jogja_streamers/bloc/audio_player_bloc.dart';
+import 'package:jogja_streamers/bloc/radio_is_play_bloc.dart';
 import 'package:jogja_streamers/bloc/radio_list_bloc.dart';
+import 'package:jogja_streamers/bloc/radio_play_bloc.dart';
 import 'package:jogja_streamers/config/routes/route.dart';
 
 void main() {
@@ -16,6 +19,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => RadioListBloc()),
+        BlocProvider(create: (context) => RadioPlayBloc()),
+        BlocProvider(create: (context) => RadioIsPlayBloc()),
+        BlocProvider(create: (context) => AudioPlayerBloc()),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

@@ -1,8 +1,14 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:jogja_streamers/bloc/audio_player_bloc.dart';
+import 'package:jogja_streamers/bloc/radio_is_play_bloc.dart';
 import 'package:jogja_streamers/bloc/radio_list_bloc.dart';
+import 'package:jogja_streamers/bloc/radio_play_bloc.dart';
 import 'package:jogja_streamers/config/theme/colorStyle.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:jogja_streamers/controller/audioPlayerController.dart';
+import 'package:jogja_streamers/controller/playerController.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -17,6 +23,7 @@ final List<String> imgList = [
 ];
 
 class _HomeState extends State<Home> {
+  final player = audioPl().player;
   final List<Widget> imageSliders = imgList
       .map((item) => Container(
             child: Container(
@@ -87,6 +94,9 @@ class _HomeState extends State<Home> {
                 child: ListView.builder(
               itemCount: state.length,
               itemBuilder: (context, index) {
+                String nama = state[index].radioName;
+                String url = state[index].radioUrl;
+                String gambar = state[index].radioImage;
                 print(state[index].radioName);
                 return Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -125,12 +135,36 @@ class _HomeState extends State<Home> {
                             )
                           ],
                         ),
-                        IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.play_arrow_rounded,
-                              color: cButton,
-                            ))
+                        BlocBuilder<RadioPlayBloc, Map<String, dynamic>>(
+                            builder: (context, state) {
+                          var namastate = state['nama'];
+                          return BlocBuilder<AudioPlayerBloc, AudioPlayer>(
+                            builder: (context, state) {
+                              return namastate != nama
+                                  ? IconButton(
+                                      onPressed: () async {
+                                        print(url);
+                                        await playerController()
+                                            .radio(context, nama, url, gambar);
+                                        await playerController()
+                                            .isPlay(context, true);
+                                        await state.play(UrlSource(url));
+                                      },
+                                      icon: Icon(Icons.play_arrow_rounded,
+                                          color: cButton))
+                                  : BlocBuilder<RadioIsPlayBloc, bool>(
+                                      builder: (context, state) {
+                                      return state == true
+                                          ? Text("Playing",
+                                              style: TextStyle(
+                                                  color: Colors.white))
+                                          : Text("Paused",
+                                              style: TextStyle(
+                                                  color: Colors.white));
+                                    });
+                            },
+                          );
+                        }),
                       ],
                     ),
                   ),
