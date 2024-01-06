@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jogja_streamers/controller/apiController.dart';
 import 'package:jogja_streamers/controller/playerController.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -10,9 +11,17 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
+FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
 class _SplashScreenState extends State<SplashScreen> {
   cek() async {
     await Future.delayed(Duration(seconds: 2));
+
+    flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!
+        .requestNotificationsPermission();
     await fetchAPI().fetchRadio(context);
 
     context.go('/login');

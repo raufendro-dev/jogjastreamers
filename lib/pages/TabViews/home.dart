@@ -1,13 +1,17 @@
-import 'package:audioplayers/audioplayers.dart';
+// import 'package:audioplayers/audioplayers.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:jogja_streamers/services/notification_services.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:jogja_streamers/bloc/audio_player_bloc.dart';
+
 import 'package:jogja_streamers/bloc/radio_is_play_bloc.dart';
 import 'package:jogja_streamers/bloc/radio_list_bloc.dart';
 import 'package:jogja_streamers/bloc/radio_play_bloc.dart';
 import 'package:jogja_streamers/config/theme/colorStyle.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:jogja_streamers/controller/audioPlayerController.dart';
+
 import 'package:jogja_streamers/controller/playerController.dart';
 
 class Home extends StatefulWidget {
@@ -23,7 +27,6 @@ final List<String> imgList = [
 ];
 
 class _HomeState extends State<Home> {
-  final player = audioPl().player;
   final List<Widget> imageSliders = imgList
       .map((item) => Container(
             child: Container(
@@ -143,12 +146,18 @@ class _HomeState extends State<Home> {
                               return namastate != nama
                                   ? IconButton(
                                       onPressed: () async {
+                                        await NotificationService()
+                                            .initNotification();
+                                        await NotificationService()
+                                            .showNotification(
+                                                nama, 'Sedang didengarkan');
                                         print(url);
                                         await playerController()
                                             .radio(context, nama, url, gambar);
                                         await playerController()
                                             .isPlay(context, true);
-                                        await state.play(UrlSource(url));
+                                        await state.setUrl(url);
+                                        await state.play();
                                       },
                                       icon: Icon(Icons.play_arrow_rounded,
                                           color: cButton))

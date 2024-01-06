@@ -1,4 +1,4 @@
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 

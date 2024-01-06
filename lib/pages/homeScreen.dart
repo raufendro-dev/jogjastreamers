@@ -4,14 +4,13 @@ import "package:jogja_streamers/bloc/audio_player_bloc.dart";
 import "package:jogja_streamers/bloc/radio_is_play_bloc.dart";
 import "package:jogja_streamers/bloc/radio_play_bloc.dart";
 import "package:jogja_streamers/config/theme/colorStyle.dart";
-import "package:jogja_streamers/controller/audioPlayerController.dart";
 import "package:jogja_streamers/controller/playerController.dart";
 import "package:jogja_streamers/pages/TabViews/home.dart";
 import "package:jogja_streamers/pages/TabViews/profil.dart";
 import "package:jogja_streamers/pages/TabViews/search.dart";
 import 'package:solid_bottom_sheet/solid_bottom_sheet.dart';
 import 'package:animated_music_indicator/animated_music_indicator.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -161,7 +160,8 @@ class _HomeScreenState extends State<HomeScreen>
                                       onPressed: () async {
                                         await playerController()
                                             .isPlay(context, true);
-                                        await state.play(UrlSource(url));
+                                        await state.setUrl(url);
+                                        await state.play();
                                       },
                                       icon: Icon(Icons.play_arrow_rounded,
                                           size: 70, color: cButton));
